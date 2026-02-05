@@ -1,5 +1,7 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -13,7 +15,6 @@ import {
 } from '@mui/material';
 import { usePersistentState } from '../hooks/usePersistentState';
 import { useBESSCalculator, BESSInputs } from '../hooks/useBESSCalculator';
-import BatteryChargingFullIcon from '@mui/icons-material/BatteryChargingFull';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
 const defaultInputs: BESSInputs = {
@@ -39,8 +40,13 @@ const defaultInputs: BESSInputs = {
 };
 
 export default function Dashboard() {
+  const [mounted, setMounted] = useState(false);
   const [inputs, setInputs] = usePersistentState<BESSInputs>('bess-inputs', defaultInputs);
   const results = useBESSCalculator(inputs);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleInputChange = (field: keyof BESSInputs) => (
     event: React.ChangeEvent<HTMLInputElement>
@@ -49,12 +55,27 @@ export default function Dashboard() {
     setInputs({ ...inputs, [field]: value });
   };
 
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return (
+      <Box sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography variant="h6" color="text.secondary">Loading...</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       {/* Header */}
-      <Box sx={{ p: 1.5, bgcolor: 'primary.main', color: 'white', textAlign: 'center' }}>
+      <Box sx={{ 
+        p: 1.5, 
+        bgcolor: '#e0e0e0', 
+        color: 'black', 
+        textAlign: 'center',
+        boxShadow: '0px 2px 8px rgba(0,0,0,0.15)'
+      }}>
         <Typography variant="h5" component="h1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <BatteryChargingFullIcon sx={{ fontSize: 32, mr: 1 }} />
+          <Image src="/logo.png" alt="BESS Logo" width={32} height={32} style={{ marginRight: '8px' }} />
           BESS Engineering Dashboard
         </Typography>
       </Box>
@@ -381,7 +402,10 @@ export default function Dashboard() {
           </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, mb: 2 }}>
             {[
+              { label: 'Cell Voltage', value: results.outputCellVoltage.toFixed(2), unit: 'V' },
+              { label: 'Cell Capacity', value: results.outputCellCapacity.toFixed(1), unit: 'Ah' },
               { label: 'Cell Energy', value: results.cellEnergyWh.toFixed(2), unit: 'Wh' },
+              { label: 'Cells Per Module', value: results.cellsPerModule, unit: '' },
               { label: 'Module Voltage', value: results.moduleVoltage.toFixed(1), unit: 'V' },
               { label: 'Module Capacity', value: results.moduleCapacity.toFixed(1), unit: 'Ah' },
               { label: 'Module Energy', value: results.moduleEnergyKwh.toFixed(2), unit: 'kWh' },
@@ -435,11 +459,12 @@ export default function Dashboard() {
           <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
             Electrical Performance
           </Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, mb: 2 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, mb: 2 }}>
             {[
               { label: 'Max Current', value: results.maxCurrent.toFixed(1), unit: 'A' },
               { label: 'Peak Current', value: results.peakCurrent.toFixed(1), unit: 'A' },
               { label: 'Discharge Time', value: results.dischargeTimeHours.toFixed(2), unit: 'h' },
+              { label: 'Pack Resistance', value: results.packResistanceOhms.toFixed(4), unit: 'Ω' },
               { label: 'Heat Loss', value: results.heatLossKw.toFixed(3), unit: 'kW' },
             ].map((item, idx) => (
               <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
@@ -456,6 +481,7 @@ export default function Dashboard() {
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
             {[
               { label: 'Total CMUs', value: results.totalCMU, unit: '' },
+              { label: 'Pack Monitor Count', value: results.packMonitorCount, unit: '' },
               { label: 'ICs/Rack', value: results.icPerRack, unit: '' },
               { label: 'Daisy Chains', value: results.daisyChains, unit: '' },
               { label: 'ICs/Chain', value: results.icPerChain, unit: '' },

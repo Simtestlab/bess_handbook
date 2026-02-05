@@ -39,6 +39,11 @@ export interface BESSResults {
   moduleVoltage: number;
   moduleCapacity: number;
   moduleEnergyKwh: number;
+  cellsPerModule: number;
+  
+  // Pass-Through Outputs (for final report)
+  outputCellVoltage: number;
+  outputCellCapacity: number;
 
   // Pack / System Level
   packVoltage: number;
@@ -63,12 +68,14 @@ export interface BESSResults {
 
   // BMS & Protection Logic
   totalCMU: number;
+  packMonitorCount: number;
   icPerRack: number;
   daisyChains: number;
   icPerChain: number;
   contactorRating: number;
   fuseRating: number;
   peakCurrent: number;
+  packResistanceOhms: number;
 
   // Status
   requiredModules: number;
@@ -84,6 +91,11 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
     const moduleVoltage = inputs.cellVoltage * inputs.seriesCells;
     const moduleCapacity = inputs.cellCapacity * inputs.parallelCells;
     const moduleEnergyKwh = (moduleVoltage * moduleCapacity) / 1000;
+    const cellsPerModule = inputs.seriesCells * inputs.parallelCells;
+    
+    // Pass-Through Outputs
+    const outputCellVoltage = inputs.cellVoltage;
+    const outputCellCapacity = inputs.cellCapacity;
 
     // Pack / System Level
     const packVoltage = moduleVoltage * inputs.seriesModules;
@@ -104,10 +116,12 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
     const maxCurrent = packCapacity * inputs.cRate;
     const maxPowerKw = (packVoltage * maxCurrent) / 1000;
     const dischargeTimeHours = 1 / inputs.cRate;
-    const heatLossKw = (Math.pow(maxCurrent, 2) * (inputs.packResistanceMilliOhm / 1000)) / 1000;
+    const packResistanceOhms = inputs.packResistanceMilliOhm / 1000;
+    const heatLossKw = (Math.pow(maxCurrent, 2) * packResistanceOhms) / 1000;
 
     // BMS & Protection Logic
     const totalCMU = totalModules;
+    const packMonitorCount = rackCount; // 1 Monitor per Rack
     const icPerRack = Math.ceil((totalCellCount / inputs.cellsPerIC) / rackCount);
     const daisyChains = Math.ceil(icPerRack / inputs.maxICPerChain);
     const icPerChain = Math.ceil(icPerRack / daisyChains);
@@ -135,6 +149,9 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
       moduleVoltage,
       moduleCapacity,
       moduleEnergyKwh,
+      cellsPerModule,
+      outputCellVoltage,
+      outputCellCapacity,
       packVoltage,
       packCapacity,
       packEnergyKwh,
@@ -151,12 +168,14 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
       dischargeTimeHours,
       heatLossKw,
       totalCMU,
+      packMonitorCount,
       icPerRack,
       daisyChains,
       icPerChain,
       contactorRating,
       fuseRating,
       peakCurrent,
+      packResistanceOhms,
       requiredModules,
       designStatus,
       energyStatus,
