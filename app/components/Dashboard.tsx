@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Container,
   Card,
   CardContent,
   TextField,
@@ -51,506 +50,426 @@ export default function Dashboard() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 700, color: 'primary.main' }}>
-          <BatteryChargingFullIcon sx={{ fontSize: 48, verticalAlign: 'middle', mr: 2 }} />
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      {/* Header */}
+      <Box sx={{ p: 1.5, bgcolor: 'primary.main', color: 'white', textAlign: 'center' }}>
+        <Typography variant="h5" component="h1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <BatteryChargingFullIcon sx={{ fontSize: 32, mr: 1 }} />
           BESS Engineering Dashboard
-        </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Battery Energy Storage System Calculator & Design Tool
         </Typography>
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-        {/* LEFT COLUMN: INPUTS */}
-        <Box sx={{ flex: { xs: '1 1 100%', md: '0 0 33.333%' } }}>
+      {/* Main Content Area */}
+      <Box sx={{ flex: 1, display: 'flex', overflow: 'hidden', p: 1, gap: 1 }}>
+        {/* LEFT PANEL: INPUTS (35%) */}
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            width: '35%', 
+            overflowY: 'auto', 
+            p: 2,
+            '&::-webkit-scrollbar': { width: '8px' },
+            '&::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '4px' }
+          }}
+        >
           {/* Cell Specifications */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Cell Specifications
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Cell Chemistry"
-                value={inputs.cellChemistry}
-                onChange={handleInputChange('cellChemistry')}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Nominal Cell Voltage"
-                type="number"
-                value={inputs.cellVoltage}
-                onChange={handleInputChange('cellVoltage')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">V</InputAdornment>,
-                }}
-                inputProps={{ step: 0.1 }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Cell Capacity"
-                type="number"
-                value={inputs.cellCapacity}
-                onChange={handleInputChange('cellCapacity')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">Ah</InputAdornment>,
-                }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Cell Max Voltage"
-                type="number"
-                value={inputs.cellMaxVoltage}
-                onChange={handleInputChange('cellMaxVoltage')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">V</InputAdornment>,
-                }}
-                inputProps={{ step: 0.01 }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Cell Min Voltage"
-                type="number"
-                value={inputs.cellMinVoltage}
-                onChange={handleInputChange('cellMinVoltage')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">V</InputAdornment>,
-                }}
-                inputProps={{ step: 0.01 }}
-              />
-            </CardContent>
-          </Card>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            Cell Specifications
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <TextField
+            fullWidth
+            size="small"
+            margin="dense"
+            label="Chemistry"
+            value={inputs.cellChemistry}
+            onChange={handleInputChange('cellChemistry')}
+          />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Voltage"
+              type="number"
+              value={inputs.cellVoltage}
+              onChange={handleInputChange('cellVoltage')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">V</Typography></InputAdornment> }}
+              inputProps={{ step: 0.1 }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Capacity"
+              type="number"
+              value={inputs.cellCapacity}
+              onChange={handleInputChange('cellCapacity')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">Ah</Typography></InputAdornment> }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Max V"
+              type="number"
+              value={inputs.cellMaxVoltage}
+              onChange={handleInputChange('cellMaxVoltage')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">V</Typography></InputAdornment> }}
+              inputProps={{ step: 0.01 }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Min V"
+              type="number"
+              value={inputs.cellMinVoltage}
+              onChange={handleInputChange('cellMinVoltage')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">V</Typography></InputAdornment> }}
+              inputProps={{ step: 0.01 }}
+            />
+          </Box>
 
           {/* Module Topology */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Module Topology
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Cells in Series"
-                type="number"
-                value={inputs.seriesCells}
-                onChange={handleInputChange('seriesCells')}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Cells in Parallel"
-                type="number"
-                value={inputs.parallelCells}
-                onChange={handleInputChange('parallelCells')}
-              />
-            </CardContent>
-          </Card>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mt: 2, mb: 1 }}>
+            Module Topology
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Series Cells"
+              type="number"
+              value={inputs.seriesCells}
+              onChange={handleInputChange('seriesCells')}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Parallel Cells"
+              type="number"
+              value={inputs.parallelCells}
+              onChange={handleInputChange('parallelCells')}
+            />
+          </Box>
 
           {/* System Topology */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                System Topology
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Series Modules"
-                type="number"
-                value={inputs.seriesModules}
-                onChange={handleInputChange('seriesModules')}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Parallel Modules (Pack)"
-                type="number"
-                value={inputs.parallelModules}
-                onChange={handleInputChange('parallelModules')}
-              />
-            </CardContent>
-          </Card>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mt: 2, mb: 1 }}>
+            System Topology
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Series Modules"
+              type="number"
+              value={inputs.seriesModules}
+              onChange={handleInputChange('seriesModules')}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Parallel Modules"
+              type="number"
+              value={inputs.parallelModules}
+              onChange={handleInputChange('parallelModules')}
+            />
+          </Box>
 
           {/* System Targets */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                System Targets
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Target BESS Energy"
-                type="number"
-                value={inputs.targetEnergy}
-                onChange={handleInputChange('targetEnergy')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">kWh</InputAdornment>,
-                }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Target Rack Energy"
-                type="number"
-                value={inputs.targetRackEnergy}
-                onChange={handleInputChange('targetRackEnergy')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">kWh</InputAdornment>,
-                }}
-              />
-            </CardContent>
-          </Card>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mt: 2, mb: 1 }}>
+            System Targets
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Target Energy"
+              type="number"
+              value={inputs.targetEnergy}
+              onChange={handleInputChange('targetEnergy')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">kWh</Typography></InputAdornment> }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Rack Energy"
+              type="number"
+              value={inputs.targetRackEnergy}
+              onChange={handleInputChange('targetRackEnergy')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">kWh</Typography></InputAdornment> }}
+            />
+          </Box>
 
           {/* Performance */}
-          <Card sx={{ mb: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Performance
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Depth of Discharge (DOD)"
-                type="number"
-                value={inputs.dod}
-                onChange={handleInputChange('dod')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                }}
-                inputProps={{ step: 0.01, min: 0, max: 1 }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Discharge C-Rate"
-                type="number"
-                value={inputs.cRate}
-                onChange={handleInputChange('cRate')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">C</InputAdornment>,
-                }}
-                inputProps={{ step: 0.1 }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="System Efficiency"
-                type="number"
-                value={inputs.efficiency}
-                onChange={handleInputChange('efficiency')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                }}
-                inputProps={{ step: 0.01, min: 0, max: 1 }}
-              />
-            </CardContent>
-          </Card>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mt: 2, mb: 1 }}>
+            Performance
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="DOD"
+              type="number"
+              value={inputs.dod}
+              onChange={handleInputChange('dod')}
+              inputProps={{ step: 0.01, min: 0, max: 1 }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="C-Rate"
+              type="number"
+              value={inputs.cRate}
+              onChange={handleInputChange('cRate')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">C</Typography></InputAdornment> }}
+              inputProps={{ step: 0.1 }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Efficiency"
+              type="number"
+              value={inputs.efficiency}
+              onChange={handleInputChange('efficiency')}
+              inputProps={{ step: 0.01, min: 0, max: 1 }}
+            />
+          </Box>
 
           {/* BMS & Protection */}
-          <Card sx={{ boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                BMS & Protection
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <TextField
-                fullWidth
-                label="Cells Per Monitoring IC"
-                type="number"
-                value={inputs.cellsPerIC}
-                onChange={handleInputChange('cellsPerIC')}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Maximum IC per Chain"
-                type="number"
-                value={inputs.maxICPerChain}
-                onChange={handleInputChange('maxICPerChain')}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Protection Safety Margin"
-                type="number"
-                value={inputs.protectionMargin}
-                onChange={handleInputChange('protectionMargin')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Peak Current Multiplier"
-                type="number"
-                value={inputs.peakMultiplier}
-                onChange={handleInputChange('peakMultiplier')}
-                inputProps={{ step: 0.1 }}
-                sx={{ mb: 2 }}
-              />
-              
-              <TextField
-                fullWidth
-                label="Pack Internal Resistance"
-                type="number"
-                value={inputs.packResistanceMilliOhm}
-                onChange={handleInputChange('packResistanceMilliOhm')}
-                InputProps={{
-                  endAdornment: <InputAdornment position="end">mΩ</InputAdornment>,
-                }}
-              />
-            </CardContent>
-          </Card>
-        </Box>
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600, color: 'primary.main', mt: 2, mb: 1 }}>
+            BMS & Protection
+          </Typography>
+          <Divider sx={{ mb: 1.5 }} />
+          
+          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.5 }}>
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Cells/IC"
+              type="number"
+              value={inputs.cellsPerIC}
+              onChange={handleInputChange('cellsPerIC')}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Max IC/Chain"
+              type="number"
+              value={inputs.maxICPerChain}
+              onChange={handleInputChange('maxICPerChain')}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Safety Margin"
+              type="number"
+              value={inputs.protectionMargin}
+              onChange={handleInputChange('protectionMargin')}
+              InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">%</Typography></InputAdornment> }}
+            />
+            <TextField
+              fullWidth
+              size="small"
+              margin="dense"
+              label="Peak Multiplier"
+              type="number"
+              value={inputs.peakMultiplier}
+              onChange={handleInputChange('peakMultiplier')}
+              inputProps={{ step: 0.1 }}
+            />
+          </Box>
+          
+          <TextField
+            fullWidth
+            size="small"
+            margin="dense"
+            label="Pack Resistance"
+            type="number"
+            value={inputs.packResistanceMilliOhm}
+            onChange={handleInputChange('packResistanceMilliOhm')}
+            InputProps={{ endAdornment: <InputAdornment position="end"><Typography variant="caption">mΩ</Typography></InputAdornment> }}
+          />
+        </Paper>
 
-        {/* RIGHT COLUMN: RESULTS */}
-        <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 66.666%' } }}>
+        {/* RIGHT PANEL: RESULTS (65%) */}
+        <Paper 
+          elevation={3} 
+          sx={{ 
+            width: '65%', 
+            overflowY: 'auto', 
+            p: 2,
+            '&::-webkit-scrollbar': { width: '8px' },
+            '&::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '4px' }
+          }}
+        >
           {/* Status Alerts */}
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 2 }}>
             <Alert 
               severity={results.designStatus === 'Optimal' ? 'success' : results.designStatus === 'Increase Modules' ? 'error' : 'warning'}
               icon={results.designStatus === 'Optimal' ? undefined : <WarningAmberIcon />}
-              sx={{ mb: 2, fontSize: '1rem', fontWeight: 500 }}
+              sx={{ mb: 1, py: 0.5, fontSize: '0.875rem' }}
             >
-              Design Status: {results.designStatus} (Required: {results.requiredModules} modules, Designed: {results.totalModules} modules)
+              <Typography variant="body2">
+                <strong>{results.designStatus}</strong> (Required: {results.requiredModules}, Designed: {results.totalModules})
+              </Typography>
             </Alert>
             
             <Alert 
               severity={results.energyStatus === 'Energy Target Met' ? 'success' : 'error'}
-              sx={{ fontSize: '1rem', fontWeight: 500 }}
+              sx={{ py: 0.5, fontSize: '0.875rem' }}
             >
-              {results.energyStatus} (Usable: {results.usableEnergyKwh.toFixed(2)} kWh, Target: {inputs.targetEnergy} kWh)
+              <Typography variant="body2">
+                {results.energyStatus} (Usable: {results.usableEnergyKwh.toFixed(2)} kWh)
+              </Typography>
             </Alert>
           </Box>
 
-          {/* Key Metrics */}
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' }, gap: 3 }}>
-            <Card sx={{ bgcolor: 'primary.main', color: 'white', boxShadow: 4 }}>
-              <CardContent>
-                <Typography variant="subtitle2" gutterBottom>
-                  Pack Energy
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                  {results.packEnergyKwh.toFixed(2)}
-                </Typography>
+          {/* Key Metrics Cards */}
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1.5, mb: 2 }}>
+            <Card sx={{ bgcolor: 'primary.main', color: 'white' }}>
+              <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>Pack Energy</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.packEnergyKwh.toFixed(2)}</Typography>
                 <Typography variant="caption">kWh</Typography>
               </CardContent>
             </Card>
-
-            <Card sx={{ bgcolor: 'success.main', color: 'white', boxShadow: 4 }}>
-              <CardContent>
-                <Typography variant="subtitle2" gutterBottom>
-                  Usable Energy
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                  {results.usableEnergyKwh.toFixed(2)}
-                </Typography>
+            
+            <Card sx={{ bgcolor: 'success.main', color: 'white' }}>
+              <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>Usable Energy</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.usableEnergyKwh.toFixed(2)}</Typography>
                 <Typography variant="caption">kWh ({(inputs.dod * 100).toFixed(0)}% DOD)</Typography>
               </CardContent>
             </Card>
-
-            <Card sx={{ bgcolor: 'secondary.main', color: 'white', boxShadow: 4 }}>
-              <CardContent>
-                <Typography variant="subtitle2" gutterBottom>
-                  Max Power
-                </Typography>
-                <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                  {results.maxPowerKw.toFixed(2)}
-                </Typography>
+            
+            <Card sx={{ bgcolor: 'secondary.main', color: 'white' }}>
+              <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>Max Power</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.maxPowerKw.toFixed(2)}</Typography>
                 <Typography variant="caption">kW</Typography>
               </CardContent>
             </Card>
           </Box>
 
-          {/* Cell & Module Details */}
-          <Card sx={{ mt: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Cell & Module Configuration
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Cell Energy</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.cellEnergyWh.toFixed(2)} Wh</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Module Voltage</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.moduleVoltage.toFixed(1)} V</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Module Capacity</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.moduleCapacity.toFixed(1)} Ah</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Module Energy</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.moduleEnergyKwh.toFixed(2)} kWh</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Total Modules</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.totalModules}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Total Cells</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.totalCellCount}</Typography>
-                </Paper>
+          {/* Cell & Module Data */}
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            Cell & Module Configuration
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, mb: 2 }}>
+            {[
+              { label: 'Cell Energy', value: results.cellEnergyWh.toFixed(2), unit: 'Wh' },
+              { label: 'Module Voltage', value: results.moduleVoltage.toFixed(1), unit: 'V' },
+              { label: 'Module Capacity', value: results.moduleCapacity.toFixed(1), unit: 'Ah' },
+              { label: 'Module Energy', value: results.moduleEnergyKwh.toFixed(2), unit: 'kWh' },
+              { label: 'Total Modules', value: results.totalModules, unit: '' },
+              { label: 'Total Cells', value: results.totalCellCount, unit: '' },
+            ].map((item, idx) => (
+              <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" color="text.secondary">{item.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.value} {item.unit}</Typography>
               </Box>
-            </CardContent>
-          </Card>
+            ))}
+          </Box>
 
           {/* Pack Specifications */}
-          <Card sx={{ mt: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Pack Specifications
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Pack Voltage</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.packVoltage.toFixed(1)} V</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Pack Capacity</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.packCapacity.toFixed(1)} Ah</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Operating Range</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600, fontSize: '0.9rem' }}>{results.operatingRange}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Max Voltage</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.maxPackVoltage.toFixed(1)} V</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Min Voltage</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.minPackVoltage.toFixed(1)} V</Typography>
-                </Paper>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            Pack Specifications
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, mb: 2 }}>
+            {[
+              { label: 'Pack Voltage', value: results.packVoltage.toFixed(1), unit: 'V' },
+              { label: 'Pack Capacity', value: results.packCapacity.toFixed(1), unit: 'Ah' },
+              { label: 'Operating Range', value: results.operatingRange, unit: '' },
+              { label: 'Max Voltage', value: results.maxPackVoltage.toFixed(1), unit: 'V' },
+              { label: 'Min Voltage', value: results.minPackVoltage.toFixed(1), unit: 'V' },
+            ].map((item, idx) => (
+              <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" color="text.secondary">{item.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.value} {item.unit}</Typography>
               </Box>
-            </CardContent>
-          </Card>
+            ))}
+          </Box>
 
           {/* Rack Architecture */}
-          <Card sx={{ mt: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Rack Architecture
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Rack Count</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.rackCount}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Energy Per Rack</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.energyPerRack.toFixed(1)} kWh</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Modules Per Rack</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.modulesPerRack.toFixed(1)}</Typography>
-                </Paper>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            Rack Architecture
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, mb: 2 }}>
+            {[
+              { label: 'Rack Count', value: results.rackCount, unit: '' },
+              { label: 'Energy/Rack', value: results.energyPerRack.toFixed(1), unit: 'kWh' },
+              { label: 'Modules/Rack', value: results.modulesPerRack.toFixed(1), unit: '' },
+            ].map((item, idx) => (
+              <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" color="text.secondary">{item.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.value} {item.unit}</Typography>
               </Box>
-            </CardContent>
-          </Card>
+            ))}
+          </Box>
 
           {/* Electrical Performance */}
-          <Card sx={{ mt: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                Electrical Performance
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Max Current</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.maxCurrent.toFixed(1)} A</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Peak Current</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.peakCurrent.toFixed(1)} A</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Discharge Time</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.dischargeTimeHours.toFixed(2)} h</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Heat Loss</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.heatLossKw.toFixed(3)} kW</Typography>
-                </Paper>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            Electrical Performance
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, mb: 2 }}>
+            {[
+              { label: 'Max Current', value: results.maxCurrent.toFixed(1), unit: 'A' },
+              { label: 'Peak Current', value: results.peakCurrent.toFixed(1), unit: 'A' },
+              { label: 'Discharge Time', value: results.dischargeTimeHours.toFixed(2), unit: 'h' },
+              { label: 'Heat Loss', value: results.heatLossKw.toFixed(3), unit: 'kW' },
+            ].map((item, idx) => (
+              <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" color="text.secondary">{item.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.value} {item.unit}</Typography>
               </Box>
-            </CardContent>
-          </Card>
+            ))}
+          </Box>
 
           {/* BMS & Protection */}
-          <Card sx={{ mt: 3, boxShadow: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
-                BMS & Protection
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)' }, gap: 2 }}>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Total CMUs</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.totalCMU}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">ICs Per Rack</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.icPerRack}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Daisy Chains</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.daisyChains}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">ICs Per Chain</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.icPerChain}</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Contactor Rating</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.contactorRating.toFixed(1)} A</Typography>
-                </Paper>
-                <Paper elevation={0} sx={{ p: 2, bgcolor: 'grey.50' }}>
-                  <Typography variant="caption" color="text.secondary">Fuse Rating</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>{results.fuseRating.toFixed(1)} A</Typography>
-                </Paper>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'primary.main', mb: 1 }}>
+            BMS & Protection
+          </Typography>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1 }}>
+            {[
+              { label: 'Total CMUs', value: results.totalCMU, unit: '' },
+              { label: 'ICs/Rack', value: results.icPerRack, unit: '' },
+              { label: 'Daisy Chains', value: results.daisyChains, unit: '' },
+              { label: 'ICs/Chain', value: results.icPerChain, unit: '' },
+              { label: 'Contactor Rating', value: results.contactorRating.toFixed(1), unit: 'A' },
+              { label: 'Fuse Rating', value: results.fuseRating.toFixed(1), unit: 'A' },
+            ].map((item, idx) => (
+              <Box key={idx} sx={{ p: 1, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                <Typography variant="caption" color="text.secondary">{item.label}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.value} {item.unit}</Typography>
               </Box>
-            </CardContent>
-          </Card>
-        </Box>
+            ))}
+          </Box>
+        </Paper>
       </Box>
-    </Container>
+    </Box>
   );
 }
