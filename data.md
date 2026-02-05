@@ -1,4 +1,4 @@
-# BESS Engineering Dashboard - Calculation Reference
+# BESS Formula Handbook - Calculation Reference
 
 ## Overview
 This document outlines all input fields, formulas, and calculations implemented in the Battery Energy Storage System (BESS) Engineering Dashboard.

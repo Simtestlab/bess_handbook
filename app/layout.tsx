@@ -3,7 +3,7 @@ import MUIThemeProvider from './components/ThemeProvider';
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BESS Engineering Dashboard",
+  title: "BESS Formula Handbook",
   description: "Battery Energy Storage System Calculator & Design Tool",
 };
 

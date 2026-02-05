@@ -76,7 +76,7 @@ export default function Dashboard() {
       }}>
         <Typography variant="h5" component="h1" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Image src="/logo.png" alt="BESS Logo" width={32} height={32} style={{ marginRight: '8px' }} />
-          BESS Engineering Dashboard
+          BESS Formula Handbook
         </Typography>
       </Box>
 
