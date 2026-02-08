@@ -63,6 +63,8 @@ export interface BESSResults {
   // Electrical Performance
   maxCurrent: number;
   maxPowerKw: number;
+  continuousPowerKw: number;
+  peakPowerKw: number;
   dischargeTimeHours: number;
   heatLossKw: number;
 
@@ -115,6 +117,8 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
     // Electrical Performance
     const maxCurrent = packCapacity * inputs.cRate;
     const maxPowerKw = (packVoltage * maxCurrent) / 1000;
+    const continuousPowerKw = (packVoltage * packCapacity * 1) / 1000; // 1C continuous power
+    const peakPowerKw = (packVoltage * packCapacity * 3) / 1000; // 3C peak power
     const dischargeTimeHours = 1 / inputs.cRate;
     const packResistanceOhms = inputs.packResistanceMilliOhm / 1000;
     const heatLossKw = (Math.pow(maxCurrent, 2) * packResistanceOhms) / 1000;
@@ -165,6 +169,8 @@ export function useBESSCalculator(inputs: BESSInputs): BESSResults {
       modulesPerRack,
       maxCurrent,
       maxPowerKw,
+      continuousPowerKw,
+      peakPowerKw,
       dischargeTimeHours,
       heatLossKw,
       totalCMU,

@@ -370,7 +370,7 @@ export default function Dashboard() {
           </Box>
 
           {/* Key Metrics Cards */}
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1.5, mb: 2 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1.5, mb: 2 }}>
             <Card sx={{ bgcolor: 'primary.main', color: 'white' }}>
               <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
                 <Typography variant="caption" sx={{ opacity: 0.9 }}>Pack Energy</Typography>
@@ -387,11 +387,19 @@ export default function Dashboard() {
               </CardContent>
             </Card>
             
+            <Card sx={{ bgcolor: 'info.main', color: 'white' }}>
+              <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>Continuous Power</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.continuousPowerKw.toFixed(2)}</Typography>
+                <Typography variant="caption">kW (1C)</Typography>
+              </CardContent>
+            </Card>
+            
             <Card sx={{ bgcolor: 'secondary.main', color: 'white' }}>
               <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
-                <Typography variant="caption" sx={{ opacity: 0.9 }}>Max Power</Typography>
-                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.maxPowerKw.toFixed(2)}</Typography>
-                <Typography variant="caption">kW</Typography>
+                <Typography variant="caption" sx={{ opacity: 0.9 }}>Peak Power</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>{results.peakPowerKw.toFixed(2)}</Typography>
+                <Typography variant="caption">kW (3C)</Typography>
               </CardContent>
             </Card>
           </Box>
